@@ -1,79 +1,84 @@
-import React from "react"
-import {View, Text, TextInput, TouchableOpacity, Image} from "react-native"
-import styles from './style'
+import React from "react";
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import styles from './style';
 
 const Main = ({ navigation }) => {
-    return(
-
-        
-
+    return (
         <View style={styles.conteiner}>
             <View style={styles.cabecalho}>
                 <Image
-                style={styles.titulo}
-                source={require('../Title/imagem-apoio.png')}
+                    style={styles.titulo}
+                    source={require('../Title/imagem-apoio.png')}
                 />
             </View>
             <View style={styles.conteinerArtistas}>
                 <View style={styles.alinhar}>
                     <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>                        
-                            <Image
+                        <Image
                             style={styles.imgArtista}
                             source={require('./rodriguinho.jpg')}
-                            />    
-                            <Image
-                            style={styles.imgNome}
-                            source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
-                            />                       
-                    </TouchableOpacity>                
-                    <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
-                        <Image
-                        style={styles.imgArtista}
-                        source={require('my-app/src/componentes/Artistas/Logo.png')}
                         />
-                        <Image
-                        style={styles.imgNome}
-                        source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
-                        />                        
-                </TouchableOpacity>
-                </View>                    
-                <View style={styles.alinhar}>
-                    <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
+                        <View style={styles.nomeContainer}>
                             <Image
+                                style={styles.imgNome}
+                                source={require('./logo rodriguinho preto.png')}
+                            />
+                        </View>                       
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
+                        <Image
                             style={styles.imgArtista}
                             source={require('my-app/src/componentes/Artistas/Logo.png')}
-                            />
+                        />
+                        <View style={styles.nomeContainer}>
                             <Image
-                            style={styles.imgNome}
-                            source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
-                            />                        
-                    </TouchableOpacity>               
+                                style={styles.imgNome}
+                                source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.alinhar}>
                     <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
                         <Image
-                        style={styles.imgArtista}
-                        source={require('my-app/src/componentes/Artistas/Logo.png')}
+                            style={styles.imgArtista}
+                            source={require('my-app/src/componentes/Artistas/Logo.png')}
                         />
+                        <View style={styles.nomeContainer}>
+                            <Image
+                                style={styles.imgNome}
+                                source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
                         <Image
-                        style={styles.imgNome}
-                        source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
-                        />                        
-                </TouchableOpacity>
+                            style={styles.imgArtista}
+                            source={require('my-app/src/componentes/Artistas/Logo.png')}
+                        />
+                        <View style={styles.nomeContainer}>
+                            <Image
+                                style={styles.imgNome}
+                                source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
-                        <Image
+                    <Image
                         style={styles.imgArtista}
                         source={require('my-app/src/componentes/Artistas/Logo.png')}
-                        />
+                    />
+                    <View style={styles.nomeContainer}>
                         <Image
-                        style={styles.imgNome}
-                        source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
-                        />                        
-                </TouchableOpacity>                
+                            style={styles.imgNome}
+                            source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                        />
+                    </View>
+                </TouchableOpacity>
             </View>
-             
         </View>
-
     );
-}
+};
 
 export default Main;
