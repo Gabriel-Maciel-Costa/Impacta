@@ -10,5 +10,8 @@ module.exports = {
         },
       },
     ],
+    ['@babel/plugin-transform-class-properties', { loose: true }], // Modo 'loose' habilitado
+    ['@babel/plugin-transform-private-methods', { loose: true }],  // Modo 'loose' habilitado
+    ['@babel/plugin-transform-private-property-in-object', { loose: true }], // Modo 'loose' habilitado
   ],
 };

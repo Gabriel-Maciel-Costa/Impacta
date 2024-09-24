@@ -28,12 +28,12 @@ const Main = ({ navigation }) => {
                     <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
                         <Image
                             style={styles.imgArtista}
-                            source={require('my-app/src/componentes/Artistas/Logo.png')}
+                            source={require('./bonde do tigrão.jpg')}
                         />
                         <View style={styles.nomeContainer}>
                             <Image
                                 style={styles.imgNome}
-                                source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                                source={require('./logo bdt.png')}
                             />
                         </View>
                     </TouchableOpacity>
@@ -42,24 +42,24 @@ const Main = ({ navigation }) => {
                     <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
                         <Image
                             style={styles.imgArtista}
-                            source={require('my-app/src/componentes/Artistas/Logo.png')}
+                            source={require('./revelação.png')}
                         />
                         <View style={styles.nomeContainer}>
                             <Image
                                 style={styles.imgNome}
-                                source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                                source={require('./logo revelação.png')}
                             />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
                         <Image
                             style={styles.imgArtista}
-                            source={require('my-app/src/componentes/Artistas/Logo.png')}
+                            source={require('./legado.jpg')}
                         />
                         <View style={styles.nomeContainer}>
                             <Image
                                 style={styles.imgNome}
-                                source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                                source={require('./logo legado preto.png')}
                             />
                         </View>
                     </TouchableOpacity>
@@ -67,12 +67,12 @@ const Main = ({ navigation }) => {
                 <TouchableOpacity style={styles.artista} onPress={() => navigation.navigate('Opcoes')}>
                     <Image
                         style={styles.imgArtista}
-                        source={require('my-app/src/componentes/Artistas/Logo.png')}
+                        source={require('./Malu.png')}
                     />
                     <View style={styles.nomeContainer}>
                         <Image
                             style={styles.imgNome}
-                            source={require('my-app/src/componentes/Artistas/nomeArtista.png')}
+                            source={require('./logo malu.png')}
                         />
                     </View>
                 </TouchableOpacity>
