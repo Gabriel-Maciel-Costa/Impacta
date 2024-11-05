@@ -1,1 +1,11 @@
-node_modules
+# Ignorar dependências
+node_modules/
+
+# Pastas geradas pelo Expo
+.expo/
+dist/
+web-build/
+
+# Pastas de código nativo que não devem ser versionadas
+android/
+ios/

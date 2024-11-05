@@ -1,23 +1,25 @@
 {
   "expo": {
-    "slug": "projeto3", 
+    "name": "Impacta",
+    "slug": "projeto3",
     "extra": {
       "eas": {
         "projectId": "bbd56f8c-5f62-4082-836d-aaf1b0b33db9"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0", // Mude de {"policy": "appVersion"} para uma string fixa
     "updates": {
       "url": "https://u.expo.dev/bbd56f8c-5f62-4082-836d-aaf1b0b33db9"
     },
     "android": {
-      "package": "com.jacquinnacausa.projeto3"
+      "package": "com.jacquinnacausa.projeto3",
+      "versionCode": 1
     },
     "ios": {
-      "bundleIdentifier": "com.jacquinnacausa.projeto3"
+      "bundleIdentifier": "com.jacquinnacausa.projeto3",
+      "buildNumber": "1.0.0"
     },
+    "icon": "my-app/assets/images/icon.png",
     "owner": "jacquinnacausa"
   }
 }

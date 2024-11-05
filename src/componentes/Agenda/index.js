@@ -1,76 +1,132 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, FlatList, Modal, TouchableOpacity, Image, BackHandler } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Modal, TouchableOpacity, Image, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import styles from './style'; // Certifique-se de que o caminho do arquivo de estilo esteja correto.
-import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import styles from './style';
+import ThemeToggle from './ThemeToggle'; // Importe o componente
 
-const events = {
-    '2024-10-28': [{ 
-        contratante: 'Gabriel', 
-        artista: 'Revelação',
-        cache: 2500, 
-        estado: 'Rio de Janeiro', 
-        cidade: 'Rio de Janeiro', 
-        hora: '20:00' 
-    }],
-    '2024-11-10': [{ 
-        contratante: 'Raphael', 
-        artista: 'Bonde do Tigrão',
-        cache: 2000, 
-        estado: 'São Paulo', 
-        cidade: 'São Paulo', 
-        hora: '21:00' 
-    }],
-    '2024-11-14': [{ 
-        contratante: 'Juliana', 
-        artista: 'Malu',
-        cache: 2200, 
-        estado: 'Minas Gerais', 
-        cidade: 'Belo Horizonte', 
-        hora: '19:30' 
-    }],
-    '2024-11-18': [{ 
-        contratante: 'João Pedro', 
-        artista: 'Rodriguinho',
-        cache: 2150, 
-        estado: 'Rio Grande do Sul', 
-        cidade: 'Porto Alegre', 
-        hora: '14:30' 
-    }],
-    '2024-11-22': [{ 
-        contratante: 'Mathias', 
-        artista: 'Legado',
-        cache: 2400, 
-        estado: 'Bahia', 
-        cidade: 'Salvador', 
-        hora: '12:00' 
-    }],
-};
 
-const CustomCalendar = ({ navigation }) => {
+const CustomCalendar = ({ route, navigation }) => {
+    const [events, setEvents] = useState({
+        '2024-11-06': [{ 
+            artista: 'Revelação',
+            contratante: 'Gabriel', 
+            cache: '2500', 
+            estado: 'Rio de Janeiro', 
+            cidade: 'Rio de Janeiro', 
+            hora: '20:00' 
+        }],
+        '2024-11-10': [{ 
+            artista: 'Bonde do Tigrão',
+            contratante: 'Raphael', 
+            cache: 2000, 
+            estado: 'São Paulo', 
+            cidade: 'São Paulo', 
+            hora: '21:00' 
+        }],
+        '2024-11-14': [{ 
+            artista: 'Malu',
+            contratante: 'Juliana', 
+            cache: 2200, 
+            estado: 'Minas Gerais', 
+            cidade: 'Belo Horizonte', 
+            hora: '19:30' 
+        }],
+        '2024-11-18': [{ 
+            artista: 'Rodriguinho',
+            contratante: 'João Pedro', 
+            cache: 2150, 
+            estado: 'Rio Grande do Sul', 
+            cidade: 'Porto Alegre', 
+            hora: '14:30' 
+        }],
+        '2024-11-22': [{ 
+            artista: 'Legado',
+            contratante: 'Mathias', 
+            cache: 2400, 
+            estado: 'Bahia', 
+            cidade: 'Salvador', 
+            hora: '12:00' 
+        }],
+    });
+    
     const [selectedDate, setSelectedDate] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [eventDetails, setEventDetails] = useState(null);
     const [modalProximosVisible, setModalProximosVisible] = useState(false);
-    const [modalNoShowVisible, setModalNoShowVisible] = useState(false); // Novo modal
+    const [modalNoShowVisible, setModalNoShowVisible] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(false); // Estado para controlar o tema
 
-    useFocusEffect(
-        React.useCallback(() => {
-            const onBackPress = () => {
-                if (modalVisible || modalProximosVisible || modalNoShowVisible) {
-                    setModalVisible(false);
-                    setModalProximosVisible(false);
-                    setModalNoShowVisible(false);
-                    return true; // Previne que o usuário saia da tela quando um modal está aberto
-                }
-                return false;
-            };
+    // Função para carregar eventos do AsyncStorage
+    const loadEvents = async () => {
+        try {
+            const storedEvents = await AsyncStorage.getItem('events');
+            if (storedEvents) {
+                setEvents(JSON.parse(storedEvents));
+            }
+        } catch (error) {
+            console.error("Failed to load events", error);
+        }
+    };
 
-            const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    // Função para salvar eventos no AsyncStorage
+    const saveEvents = async (events) => {
+        try {
+            await AsyncStorage.setItem('events', JSON.stringify(events));
+        } catch (error) {
+            console.error("Failed to save events", error);
+        }
+    };
 
-            return () => backHandler.remove();
-        }, [modalVisible, modalProximosVisible, modalNoShowVisible])
-    );
+    // Carrega o tema salvo
+    const loadTheme = async () => {
+        try {
+            const storedTheme = await AsyncStorage.getItem('theme');
+            if (storedTheme) {
+                setIsDarkMode(storedTheme === 'dark');
+            }
+        } catch (error) {
+            console.error('Erro ao carregar o tema:', error);
+        }
+    };
+
+    // Salva a preferência de tema
+    const saveTheme = async (theme) => {
+        try {
+            await AsyncStorage.setItem('theme', theme);
+        } catch (error) {
+            console.error('Erro ao salvar o tema:', error);
+        }
+    };
+
+    // Alterna o tema
+    const toggleTheme = async () => {
+        const newTheme = !isDarkMode ? 'dark' : 'light';
+        setIsDarkMode(!isDarkMode);
+        await AsyncStorage.setItem('theme', newTheme);
+    };
+
+    useEffect(() => {
+        loadEvents(); // Carregar eventos ao montar o componente
+        loadTheme(); // Carregar o tema ao montar o componente
+    }, []);
+
+    useEffect(() => {
+        if (route.params?.newEvent) {
+            const date = Object.keys(route.params.newEvent)[0];
+            const newEvent = route.params.newEvent[date];
+
+            // Usando uma função de atualização para garantir que estamos mesclando corretamente o estado anterior
+            setEvents((prevEvents) => {
+                const updatedEvents = {
+                    ...prevEvents,
+                    [date]: [...(prevEvents[date] || []), ...newEvent]
+                };
+                saveEvents(updatedEvents); // Salvar os eventos atualizados
+                return updatedEvents;
+            });
+        }
+    }, [route.params?.newEvent]);
 
     const onDayPress = (day) => {
         const dateString = day.dateString;
@@ -80,7 +136,7 @@ const CustomCalendar = ({ navigation }) => {
             setEventDetails(events[dateString]);
             setModalVisible(true);
         } else {
-            setModalNoShowVisible(true); // Mostra o modal personalizado quando não há shows
+            setModalNoShowVisible(true);
         }
     };
 
@@ -99,9 +155,9 @@ const CustomCalendar = ({ navigation }) => {
 
     const renderEventItem = ({ item }) => (
         <View style={styles.eventItem}>
-            <Text>Contratante: {item.contratante}</Text>
             <Text>Artista: {item.artista}</Text>
-            <Text>Cache: R$ {item.cache}</Text>
+            <Text>Contratante: {item.contratante}</Text>
+            <Text>Cachê: R${item.cache}</Text>
             <Text>Estado: {item.estado}</Text>
             <Text>Cidade: {item.cidade}</Text>
             <Text>Hora: {item.hora}</Text>
@@ -113,9 +169,9 @@ const CustomCalendar = ({ navigation }) => {
             <Text>Data: {item.date}</Text>
             {item.events.map((evento, index) => (
                 <View key={index}>
-                    <Text>Contratante: {evento.contratante}</Text>
                     <Text>Artista: {evento.artista}</Text>
-                    <Text>Cache: R$ {evento.cache}</Text>
+                    <Text>Contratante: {evento.contratante}</Text>
+                    <Text>Cachê: R${evento.cache}</Text>
                     <Text>Estado: {evento.estado}</Text>
                     <Text>Cidade: {evento.cidade}</Text>
                     <Text>Hora: {evento.hora}</Text>
@@ -125,17 +181,47 @@ const CustomCalendar = ({ navigation }) => {
     );
 
     const handleNavigate = () => {
-        navigation.navigate('Forms'); 
+        navigation.navigate('Forms');
+    };
+
+    const handleDeleteEvent = () => {
+        Alert.alert(
+            'Confirmar Exclusão',
+            'Você tem certeza que deseja excluir este evento?',
+            [
+                {
+                    text: 'Cancelar',
+                    onPress: () => {},
+                    style: 'cancel'
+                },
+                {
+                    text: 'Excluir', 
+                    onPress: () => {
+                        const updatedEvents = { ...events };
+                        delete updatedEvents[selectedDate];
+                        setEvents(updatedEvents);
+                        saveEvents(updatedEvents);
+                        setModalVisible(false);
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, isDarkMode ? styles.darkBackground : styles.lightBackground]}>
             <View style={styles.cabecalho}>
                 <Image
                     style={styles.titulo}
-                    source={require('../Title/imagem-apoio.png')} // Ajuste o caminho conforme necessário
+                    source={isDarkMode 
+                        ? require('../Title/Modo claro.png')  // Imagem para o modo escuro
+                        : require('../Title/logo preta.png')  // Imagem para o modo claro
+                    }
+                    resizeMode="contain"
                 />
             </View>
+
             <View style={styles.calendar}>
                 <Calendar
                     onDayPress={onDayPress}
@@ -148,10 +234,10 @@ const CustomCalendar = ({ navigation }) => {
                     }}
                     theme={{
                         todayTextColor: '#00adf5',
-                        dayTextColor: 'rgba(18, 18, 18, 1)',
+                        dayTextColor: isDarkMode ? '#fff' : 'rgba(18, 18, 18, 1)',
                         textDisabledColor: '#d9e1e8',
                         monthTextColor: 'rgba(0, 89, 158, 1)',
-                        weekDayTextColor: 'rgba(10, 10, 10, 1)',
+                        weekDayTextColor: isDarkMode ? '#fff' : 'rgba(10, 10, 10, 1)',
                         arrowColor: '#00adf5',
                     }}
                 />
@@ -166,7 +252,6 @@ const CustomCalendar = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Modal para detalhes do evento */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -186,14 +271,19 @@ const CustomCalendar = ({ navigation }) => {
                             />
                         )}
                         
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                             <TouchableOpacity 
-                                style={[styles.customButton, { flex: 1, marginRight: 10 }]} 
+                                style={[styles.customButton, { flex: 1 }]} 
                                 onPress={handleNavigate}
                             >
-                                <Text style={styles.customButtonText}>
-                                    {eventDetails ? 'Editar' : 'Cadastrar'}
-                                </Text>
+                                <Text style={styles.customButtonText}>Editar</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity 
+                                style={[styles.customButton, { flex: 1, backgroundColor: 'rgb(140, 0, 0)', borderColor: 'rgba(94, 0, 0, 0.8)', marginLeft: 10 }]} 
+                                onPress={handleDeleteEvent}
+                            >
+                                <Text style={styles.customButtonText}>Apagar</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity 
@@ -207,7 +297,6 @@ const CustomCalendar = ({ navigation }) => {
                 </View>
             </Modal>
 
-            {/* Modal para shows próximos */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -216,7 +305,7 @@ const CustomCalendar = ({ navigation }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={[styles.modalTitle, { color: '#fff' }]}>Shows Próximos</Text>
+                    <Text style={[styles.modalTitle, { color:'#fff'}]}>Shows Próximos</Text>
                         <FlatList
                             data={showsProximos()}
                             renderItem={renderProximosShows}
@@ -232,7 +321,6 @@ const CustomCalendar = ({ navigation }) => {
                 </View>
             </Modal>
 
-            {/* Novo Modal: Nenhum Show Encontrado */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -241,24 +329,22 @@ const CustomCalendar = ({ navigation }) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={[styles.modalTitle, { color: '#fff' }]}>Nenhum Show Encontrado</Text>
+                        <Text style={[styles.modalTitle, { color:'#fff'}]}>Nenhum Show Encontrado em {selectedDate} </Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                        <TouchableOpacity 
-                                style={[styles.customButton, { flex: 1, marginLeft: 10, backgroundColor: 'rgba(0, 89, 158, 1)' }]} 
+                            <TouchableOpacity 
+                                style={[styles.customButton, { flex: 1, marginRight: 10, backgroundColor: 'rgba(0, 89, 158, 1)' }]} 
                                 onPress={handleNavigate}
                             >
-                                <Text style={styles.customButtonText}>Cadastrar</Text>
+                                <Text style={styles.customButtonText}>Agendar</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity 
-                                style={[styles.customButton, { flex: 1, marginRight: 10, backgroundColor: 'rgba(0, 89, 158, 1)'  }]} 
+                                style={[styles.customButton, { flex: 1, marginLeft: 10, backgroundColor: 'rgba(0, 89, 158, 1)' }]} 
                                 onPress={() => setModalNoShowVisible(false)}
                             >
                                 <Text style={styles.customButtonText}>Sair</Text>
                             </TouchableOpacity>
-
-                            
                         </View>
                     </View>
                 </View>

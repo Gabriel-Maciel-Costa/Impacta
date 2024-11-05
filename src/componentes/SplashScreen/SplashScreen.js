@@ -5,25 +5,36 @@ const SplashScreen = ({ navigation }) => {
   const scaleAnim = useRef(new Animated.Value(1)).current; // Animação de escala
 
   useEffect(() => {
-    // Inicia a animação de batida de coração
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1.1,  // Reduz o quanto aumenta (crescimento suave)
-          duration: 900, // Aumenta o tempo para crescer
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,    // Volta ao tamanho original
-          duration: 900, // Aumenta o tempo para voltar
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
+    // Inicia a animação de batida de coração (TU DUM)
+    const heartbeatAnimation = Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 1.1,  // Aumenta para criar o efeito de batida
+        duration: 500, // Duração da expansão (TU)
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,    // Volta ao tamanho original
+        duration: 500, // Duração para voltar ao normal (DUM)
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1.1,  // Aumenta novamente para a segunda batida
+        duration: 500, // Duração da expansão (TU)
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,    // Volta ao tamanho original
+        duration: 500, // Duração para voltar ao normal (DUM)
+        useNativeDriver: true,
+      }),
+    ]);
+
+    // Executa a animação
+    heartbeatAnimation.start();
 
     const timer = setTimeout(() => {
-      navigation.replace('Login');
-    }, 2000);
+      navigation.replace('Login'); // Navega para a tela de login após 2 segundos
+    }, 2000); // Tempo total de espera
 
     return () => clearTimeout(timer); // Limpa o timer ao desmontar
   }, [navigation, scaleAnim]);
@@ -35,8 +46,6 @@ const SplashScreen = ({ navigation }) => {
         source={require('src/componentes/Title/imagem-apoio.png')} // Caminho da logo
         style={[styles.logo, { transform: [{ scale: scaleAnim }] }]} // Aplica a animação de escala
       />
-      {/* Texto opcional */}
-      <Text style={styles.title}></Text>
     </View>
   );
 };
@@ -52,12 +61,6 @@ const styles = StyleSheet.create({
     width: 300, // Largura da logo
     height: 300, // Altura da logo
     resizeMode: 'contain', // Redimensiona a imagem para caber no container
-  },
-  title: {
-    fontSize: 24, // Tamanho da fonte para o nome ou slogan
-    fontWeight: 'bold', // Texto em negrito
-    marginTop: 20, // Margem superior para espaçamento da logo
-    color: '#333', // Cor do texto
   },
 });
 
